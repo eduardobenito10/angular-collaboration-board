@@ -29,11 +29,12 @@ fs.readdirSync(modelsPath).forEach(function (file) {
     require(modelsPath + '/' + file);
 });
 
+var pass = require('./lib/config/pass');
+
 app.configure(function() {
     app.use(express.static(__dirname + '/app'));
 });
 
-var pass = require('./lib/config/pass');
 
 // App Configuration
 app.configure('development', function(){
