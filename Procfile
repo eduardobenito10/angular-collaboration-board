@@ -1,1 +1,1 @@
-web: grunt heroku
+web: node server.js

@@ -1,0 +1,8 @@
+<section ng-init="findOne()">
+    <h2>{{board.title}} <a ng-show="currentUser._id == board.creator._id" href="/boards/{{board._id}}/edit">edit</a></h2>
+    <p>{{board.content}}</p>
+    <div>
+        <span class="badge badge-success">Posted {{board.created | date:'medium'}}</span>
+        <div class="pull-right"><span class="badge badge-success">Posted by {{board.creator.username}}</span></div>
+    </div>
+</section>
