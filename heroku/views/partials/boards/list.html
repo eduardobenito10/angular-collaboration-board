@@ -1,0 +1,12 @@
+<section ng-init="find()">
+    <div ng-repeat="board in boards">
+        <h1><a ng-href="boards/{{board._id}}">{{board.title}}</a></h1>
+        <p>{{board.content}}</p>
+        <div>
+            <span class="badge badge-success">Posted {{board.created | date:'medium'}}</span>
+            <div class="pull-right"><span class="badge badge-success">Posted by {{board.creator.username}}</span></div>
+        </div>
+        <hr>
+    </div>
+    <h1 ng-hide="!boards || boards.length">No boards yet. <br> Why don't you <a href="/boards/create">Create One</a>?</h1>
+</section>
