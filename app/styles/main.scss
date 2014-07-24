@@ -100,3 +100,27 @@ body {
 .dropdown-toggle {
   cursor: pointer;
 }
+
+.board {
+	background: url(/images/bg_corkboard.jpg) top left repeat;
+  position: relative;
+  height: 600px;
+}
+
+.sticky-note {
+	position: absolute;
+}
+
+.sticky-note .title {
+	background: transparent;
+	border: none;
+	display: block;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.sticky-note .body {
+	background: transparent;
+	border: none;
+	display: block;
+}

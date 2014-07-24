@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('angularPassportApp')
-  .controller('BoardsCtrl', function ($scope, Boards, UserService, $location, $routeParams, $rootScope) {
+  .controller('BoardsCtrl', function ($scope, Boards, UserService, $location, $routeParams, $rootScope, socket) {
   
   $scope.allUsers = [];
 
@@ -25,12 +25,14 @@ angular.module('angularPassportApp')
     }
   };
 	$scope.allowedUsers = [];
+	$scope.access = "public";
 
     $scope.create = function() {
       var board = new Boards({
         title: this.title,
         content: this.content,
-		    users: $scope.allowedUsers
+		users: $scope.allowedUsers,
+		access: $scope.access
       });
       board.$save(function(response) {
         $location.path("boards/" + response._id);
@@ -52,10 +54,7 @@ angular.module('angularPassportApp')
 
     $scope.update = function() {
       var board = $scope.board;
-      console.info(board);
-      console.info($scope.allowedUsers);
       board.users = $scope.allowedUsers;
-      console.info(board.users);
       board.$update(function() {
         $location.path('boards/' + board._id);
       });
@@ -73,6 +72,8 @@ angular.module('angularPassportApp')
       }, function(board) {
         $scope.board = board;
         $scope.allowedUsers = board.users;
+		console.info('load');
+		socket.emit('load', board);
       });
     };
   });

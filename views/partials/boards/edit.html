@@ -12,7 +12,14 @@
                 <textarea ng-model="board.content" class="form-control" id="content" rows="10" placeholder="Content"></textarea>
             </div>
         </div>
-        <div class="form-group">
+		<div class="form-group">
+            <label class="control-label" for="content">Access</label>
+            <div class="controls">
+                <input type="radio" name="access" ng-model="board.access" value="public">Public
+                <input type="radio" name="access" ng-model="board.access" value="private">Private
+            </div>
+        </div>
+        <div class="form-group" ng-show="board.access == 'private'">
             <label class="control-label">Users</label>
             <div class="controls">
                 <label ng-repeat="user in allUsers">

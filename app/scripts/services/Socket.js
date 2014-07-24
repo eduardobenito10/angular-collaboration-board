@@ -2,7 +2,7 @@
 
 angular.module('angularPassportApp')
  .factory('socket', function($rootScope) {
-	var socket = io.connect();
+	var socket = io.connect(window.location.hostname);
 	return {
 		on: function(eventName, callback) {
 			socket.on(eventName, function() {

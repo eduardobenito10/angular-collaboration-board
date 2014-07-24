@@ -1,87 +1,7 @@
 'use strict';
 
 angular.module('angularPassportApp')
-	.controller('stickyController',function($scope, Author, socket) {
-		
-	$scope.notes = [];
-	
-	// Incoming
-	socket.on('init', function(data) {
-		console.info('oninit');
-		console.info(data);
-		$scope.notes = data;
-	});
-
-	socket.on('onNoteCreated', function(data) {
-		console.info('onNoteCreated');
-		$scope.notes.push(data);
-	});
-
-	socket.on('onNoteDeleted', function(data) {
-		$scope.handleDeletedNoted(data._id);
-	});
-
-	// Outgoing
-	$scope.createNote = function(board) {
-		var note = {
-			text: 'New Note',
-			y: '50',
-			x: '10',
-			author: '',
-			complete: false,
-			board: board._id
-		};
-
-		socket.emit('createNote', note);
-    }
-
-	$scope.deleteNote = function(_id) {
-		console.info('delete Note');
-		$scope.handleDeletedNoted(_id);
-
-				//$scope.ondelete({
-				//	_id: _id
-				//});
-		socket.emit('deleteNote', {_id: _id});
-	};
-
-	$scope.handleDeletedNoted = function(_id) {
-		var oldNotes = $scope.notes,
-		newNotes = [];
-
-		angular.forEach(oldNotes, function(note) {
-			if(note._id !== _id) newNotes.push(note);
-		});
-
-		$scope.notes = newNotes;
-	}
-			$scope.authors = Author.authors;
-
-			socket.on('onNoteUpdated', function(data) {
-				// Update if the same note
-				if($scope.note != undefined && data._id == $scope.note._id) {
-					$scope.note.text = data.text;
-					$scope.note.author = data.author;
-				}				
-			});
-
-			// Outgoing
-			$scope.updateNote = function(note) {
-				socket.emit('updateNote', note);
-			};
-	
-			$scope.updateAuthor = function(note, author) {
-				socket.emit('updateNote', note);
-			};
-
-			/*$scope.deleteNote = function(_id) {
-				$scope.ondelete({
-					_id: _id
-				});
-			};*/
-
-		})
-.directive('stickyNote', function(socket, Author) {
+.directive('stickyNote', function(socket) {
 	var linker = function(scope, element, attrs) {
 			element.draggable({
 				stop: function(event, ui) {
@@ -110,14 +30,13 @@ angular.module('angularPassportApp')
 			
 		};
 
-
 	return {
 		restrict: 'A',
 		link: linker,
-		controller: 'stickyController',
 		scope: {
 			note: '=',
-			ondelete: '&'
+			ondelete: '&',
+			board: '='
 		}
 	};
 })

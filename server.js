@@ -76,10 +76,8 @@ app.use(passport.session());
 
 var Note = mongoose.model('Note');
 
+
 io.sockets.on('connection', function(socket) {
-	Note.find(function(err, notes) {
-		socket.emit('init', notes);
-	});
 
 	socket.on('createNote', function(data) {
 		Note.create({
@@ -88,7 +86,8 @@ io.sockets.on('connection', function(socket) {
             color: data.color,
             x: data.x,
 			y: data.y,
-            completed: data.complete
+            completed: data.complete,
+			board: data.board
         }, function(err, notes){
 			data._id = notes._id;
 			io.sockets.emit('onNoteCreated', data);
@@ -101,8 +100,8 @@ io.sockets.on('connection', function(socket) {
 			Note.findOne({ _id: new ObjectId(data._id) }, function (err, note){
 			  if(data.text)
 			    note.text = data.text;
-		      if(data.author)
-				note.author = data.author;
+		      if(data.asignedTo)
+				note.asignedTo = data.asignedTo;
 			  note.save();
 			});
 			socket.broadcast.emit('onNoteUpdated', data);
@@ -124,6 +123,10 @@ io.sockets.on('connection', function(socket) {
 		}, function(err, notes){
         });
 		socket.broadcast.emit('onNoteDeleted', data);
+	});
+
+	socket.on('disconnect', function(){
+		console.log('user disconnected');
 	});
 });
 

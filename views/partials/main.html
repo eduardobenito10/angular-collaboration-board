@@ -1,22 +1,2 @@
 <h2 ng-show="!currentUser">Welcome. Please log in.</h2>
 <h2 ng-show="currentUser">Hello {{currentUser.username}}</h2>
-
-
-	<div ng-controller="stickyController">
-    <div class="navbar navbar-inverse">
-        <div class="navbar-inner">
-            <a class="brand" href="#">Backlog Ibérico</a>
-            <form class="navbar-search pull-left">
-  <input type="text" class="search-query" placeholder="Filter" ng-model="filter">
-</form>
-            <button id="createButton" ng-click="createNote()" class="btn btn-info pull-right">Create Note</button>
-        </div>
-    </div>
-    <div sticky-note="" ng-repeat="note in notes | filter:filter" note="note" class="alert alert-block sticky-note" style="left: {{note.x}}px; top: {{note.y}}px; display: block" ondelete="$scope.deleteNote(_id)">
-        <button type="button" class="close" ng-click="deleteNote(note._id)">&times;</button>
-        <textarea ng-model="note.text" ng-change="updateNote(note)" class="body">{{note.text}}</textarea>
-        <select ng-selected="note.author" ng-model="note.author" ng-options="author.id as author.name for author in authors" ng-change="updateAuthor(note, note.author)">
-      <option value="">-- Asignado a --</option>
-    </select>
-    </div>
-</div>
