@@ -108,13 +108,22 @@ io.sockets.on('connection', function(socket) {
 		}
 	});
 
+	socket.on('sendMessage', function(data) {
+		if (data){
+			socket.broadcast.emit('onMsgReceived', data);
+		}
+	});
+
 	socket.on('moveNote', function(data){
-		Note.findOne({ _id: new ObjectId(data._id) }, function (err, note){
-		  note.x = data.x;
-		  note.y = data.y;
-		  note.save();
-		});
-		socket.broadcast.emit('onNoteMoved', data);
+        if (data){
+            console.info('moveNote');
+            Note.findOne({ _id: new ObjectId(data._id) }, function (err, note){
+              note.x = data.x;
+              note.y = data.y;
+              note.save();
+            });
+            socket.broadcast.emit('onNoteMoved', data);
+        }
 	});
 
 	socket.on('deleteNote', function(data){

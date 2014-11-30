@@ -1,9 +1,11 @@
 'use strict';
 
 angular.module('angularPassportApp')
-	.controller('NotesCtrl',function($scope, Notes, UserService, $routeParams, socket) {
+	.controller('NotesCtrl',function($scope, Notes, UserService, $routeParams, socket, $rootScope) {
 		
 	$scope.notes = [];
+	$scope.notifications = [];
+    $scope.messageText;
 
 	Notes.query({
         boardId: $routeParams.boardId
@@ -17,12 +19,20 @@ angular.module('angularPassportApp')
 	});
 
 	socket.on('onNoteCreated', function(data) {
-		console.info('onNoteCreated');
 		$scope.notes.push(data);
+        $scope.notifications.push(data.notification);
+	});
+	
+    socket.on('onNoteUpdated', function(data) {
+        $scope.notifications.push(data.notification);
 	});
 
 	socket.on('onNoteDeleted', function(data) {
 		$scope.handleDeletedNoted(data._id);
+	});
+    
+	socket.on('onMsgReceived', function(data) {
+        $scope.notifications.push(data);
 	});
 
 	// Outgoing
@@ -36,7 +46,7 @@ angular.module('angularPassportApp')
 			board: board
 		};
 
-		console.log(note);
+        note.notification = {text:$rootScope.currentUser.username + ' created a new note'};
 		socket.emit('createNote', note);
     }
 
@@ -57,7 +67,14 @@ angular.module('angularPassportApp')
 	}
 
 	$scope.updateNote = function(note) {
+            note.notification = {text:$rootScope.currentUser.username + ' updated a note'};
 			socket.emit('updateNote', note);
+	};
+
+	$scope.sendMessage = function() {
+            var data = {text:$rootScope.currentUser.username + ':' + $scope.messageText};
+            console.info(data);
+			socket.emit('sendMessage', data);
 	};
 
 });
