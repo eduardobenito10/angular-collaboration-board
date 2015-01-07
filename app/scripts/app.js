@@ -1,7 +1,5 @@
 'use strict';
 
-angular.module('appMock', []);
-
 angular.module('angularPassportApp', [
   'ngCookies',
   'ngResource',

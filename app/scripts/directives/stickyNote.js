@@ -23,14 +23,6 @@ angular.module('angularPassportApp')
 				}
 			});
 
-			socket.on('onNoteUpdated', function(data) {
-				// Update if the same note
-				if(data._id == scope.note._id) {
-                    scope.note.text = data.text;
-                    scope.note.asignedTo = data.asignedTo;
-				}
-			});
-
 			// Some DOM initiation to make it nice
 			element.css('left', '10px');
 			element.css('top', '50px');

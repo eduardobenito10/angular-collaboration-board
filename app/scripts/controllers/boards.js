@@ -72,10 +72,8 @@ angular.module('angularPassportApp')
       }, function(board) {
         $scope.board = board;
         $scope.allowedUsers = board.users;
+		console.info('load');
+		socket.emit('load', board);
       });
     };
-
-	$scope.$on('$destroy', function (event) {
-        socket.removeAllListeners();
-    });
   });
